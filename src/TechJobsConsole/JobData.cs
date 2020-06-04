@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -47,9 +48,9 @@ namespace TechJobsConsole
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
-                string aValue = row[column];
+                string aValue = row[column].ToLower();
 
-                if (aValue.Contains(value))
+                if (aValue.Contains(value.ToLower()))
                 {
                     jobs.Add(row);
                 }
@@ -139,23 +140,29 @@ namespace TechJobsConsole
             return rowValues.ToArray();
         }
 
-        //public static list<dictionary<string, string>> findbyvalue(string column, string value)
-        //{
-             //loaddata();
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
 
-            //list<dictionary<string, string>> jobs = new list<dictionary<string, string>>();
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
 
-            //foreach (dictionary<string, string> row in alljobs)
-            //{
-            //    string avalue = row[column];
+            foreach (Dictionary<string, string> someJob in AllJobs)
+            {
 
-            //    if (avalue.contains(value))
-            //    {
-            //        jobs.add(row);
-            //    }
-            //}
-
-        //    return jobs;
-        //}
+                foreach (KeyValuePair<string, string> description in someJob)
+                {
+                    string aValue = value.ToLower();
+                    string currentKey = description.Value.ToLower();
+                    //testing line:
+                    //Console.WriteLine("aValue: " + aValue + " description.Value.ToLower(): " + description.Value.ToLower());
+                    if (currentKey.Contains(aValue))
+                    {
+                        jobs.Add(someJob);
+                        break;
+                    }
+                }
+            }
+            return jobs;
+        }
     }
 }
